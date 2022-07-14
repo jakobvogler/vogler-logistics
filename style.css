@@ -1,0 +1,15 @@
+body {
+    font-family: 'Slabo 27px', serif;
+    background-image: url('src/background.png');
+    text-align: center;
+}
+
+.kasten {
+    width: 600px;
+    height: auto;
+    background: #ffffff;
+    margin: 30px auto;
+    border-radius: 4px;
+    transition: .2s ease-in;
+    padding: 20px;
+}
