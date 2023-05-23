@@ -22,38 +22,42 @@
         </div>
 
         <?php
-            if (!isset($_GET['tracking']) || !isset($_GET['zip'])) {
-                return;
+            function script() {
+                if (!isset($_GET['tracking']) || !isset($_GET['zip'])) {
+                    return;
+                }
+                
+                $tracking = trim($_GET['tracking']);
+                $zip = trim($_GET['zip']);
+                
+                if ($tracking == '' && $zip == '') {
+                    return;
+                }
+                if ($tracking == '' || $zip == '') {
+                    echo '<div class="container"><h2>Shipment Details</h2><br><p>To perform a query, all fields must be filled in</p></div>';
+                    return;
+                }
+                
+                require 'inc/db.php';
+                
+                $tracking = $db->real_escape_string($tracking);
+                $zip = $db->real_escape_string($zip);
+                
+                $query = 'SELECT * FROM shipment INNER JOIN address ON shipment.recipient = address.id WHERE shipment.id = "' . $tracking . '" AND address.zip="' . $zip . '";';
+                
+                $res = $db->query($query);
+                
+                $number = $res->num_rows;
+                $res = $res->fetch_ASSOC();
+                
+                if ($number) {
+                    echo '<div class="container"><h2>Shipment Details</h2><br><p>Status: ' . $res['status'] . '<br>Category: ' . $res['category'] . '<br><br><br>Recipient<br><br>' . $res['first_name'] . ' ' . $res['last_name'] . '<br>' . $res['street'] . ' ' . $res['house_number'] . '<br>' . $res['apartment'] . '<br>' . $res['zip'] . ' ' . $res['city'] . '<br>' . $res['country'] . '</p></div>';
+                } else {
+                    echo '<div class="container"><h2>Shipment Details</h2><br><p>No entry could be found under the specified details</p></div>';
+                }
             }
 
-            $tracking = trim($_GET['tracking']);
-            $zip = trim($_GET['zip']);
-
-            if ($tracking == '' && $zip == '') {
-                return;
-            }
-            if ($tracking == '' || $zip == '') {
-                echo '<div class="container"><h2>Shipment Details</h2><br><p>To perform a query, all fields must be filled in</p></div>';
-                return;
-            }
-
-            require 'inc/db.php';
-
-            $tracking = $db->real_escape_string($tracking);
-            $zip = $db->real_escape_string($zip);
-
-            $query = 'SELECT * FROM shipment INNER JOIN address ON shipment.recipient = address.id WHERE shipment.id = "' . $tracking . '" AND address.zip="' . $zip . '";';
-
-            $res = $db->query($query);
-
-            $number = $res->num_rows;
-            $res = $res->fetch_ASSOC();
-
-            if ($number) {
-                echo '<div class="container"><h2>Shipment Details</h2><br><p>Status: ' . $res['status'] . '<br>Category: ' . $res['category'] . '<br><br><br>Recipient<br><br>' . $res['first_name'] . ' ' . $res['last_name'] . '<br>' . $res['street'] . ' ' . $res['house_number'] . '<br>' . $res['apartment'] . '<br>' . $res['zip'] . ' ' . $res['city'] . '<br>' . $res['country'] . '</p></div>';
-            } else {
-                echo '<div class="container"><h2>Shipment Details</h2><br><p>No entry could be found under the specified details</p></div>';
-            }
+            script();
         ?>
 
         

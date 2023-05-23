@@ -23,58 +23,62 @@
         </div>
 
         <?php
-            if (!isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['query'])) {
-                return;
-            }
-
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            $query = $_POST['query'];
-
-            if ($username == '' && $password == '' && $query == '') {
-                return;
-            }
-            if ($username == '' || $password == '' || $query == '') {
-                echo '<div class="container"><h2>Output</h2><br><p>Some inputs are missing</p></div>';
-                return;
-            }
-
-            require 'inc/db.php';
-
-            $sha = hash('sha256', $password);
-
-            $authquery = 'SELECT * FROM admin WHERE username = "' . $username . '" AND password = "' . $sha . '";';
-            $auth = $db->query($authquery);
-            $db->close();
-
-            if ($auth->num_rows) {
-                require 'inc/db.php';
-
-                $res = $db->query($query);
-                               
-                echo '<div class=container><h2>Output</h2><br><p>' . $query . '<br><br>';
-
-                if ($error = $db->errno) {
-                    echo $error . ': ' . $db->error;
-                } else if ($res->num_rows > 0) {
-                    echo '<pre style="text-align: left;">';
-
-                    while ($set = $res->fetch_ASSOC()) {
-                        print_r($set);
-                    }
-
-                    echo '</pre>';
-                } else {
-                    echo 'command executed';
+            function script() {
+                if (!isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['query'])) {
+                    return;
                 }
-
-                echo '</p></div>';
                 
-            } else {
-                echo '<div class="container"><h2>Output</h2><br><p>No admin account exists under the given username and password</p></div>';
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+                $query = $_POST['query'];
+                
+                if ($username == '' && $password == '' && $query == '') {
+                    return;
+                }
+                if ($username == '' || $password == '' || $query == '') {
+                    echo '<div class="container"><h2>Output</h2><br><p>Some inputs are missing</p></div>';
+                    return;
+                }
+                
+                require 'inc/db.php';
+                
+                $sha = hash('sha256', $password);
+                
+                $authquery = 'SELECT * FROM admin WHERE username = "' . $username . '" AND password = "' . $sha . '";';
+                $auth = $db->query($authquery);
+                $db->close();
+                
+                if ($auth->num_rows) {
+                    require 'inc/db.php';
+                    
+                    $res = $db->query($query);
+                    
+                    echo '<div class=container><h2>Output</h2><br><p>' . $query . '<br><br>';
+                    
+                    if ($error = $db->errno) {
+                        echo $error . ': ' . $db->error;
+                    } else if ($res->num_rows > 0) {
+                        echo '<pre style="text-align: left;">';
+                        
+                        while ($set = $res->fetch_ASSOC()) {
+                            print_r($set);
+                        }
+                        
+                        echo '</pre>';
+                    } else {
+                        echo 'command executed';
+                    }
+                    
+                    echo '</p></div>';
+                    
+                } else {
+                    echo '<div class="container"><h2>Output</h2><br><p>No admin account exists under the given username and password</p></div>';
+                }
+                
+                $db->close();
             }
 
-            $db->close();
+            script();
         ?>
 
         <div class="container">
