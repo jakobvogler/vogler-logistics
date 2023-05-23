@@ -23,13 +23,18 @@
         </div>
 
         <?php
+            if (!isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['query'])) {
+                return;
+            }
+
             $username = $_POST['username'];
             $password = $_POST['password'];
             $query = $_POST['query'];
 
             if ($username == '' && $password == '' && $query == '') {
                 return;
-            } else if ($username == '' || $password == '' || $query == '') {
+            }
+            if ($username == '' || $password == '' || $query == '') {
                 echo '<div class="container"><h2>Output</h2><br><p>Some inputs are missing</p></div>';
                 return;
             }

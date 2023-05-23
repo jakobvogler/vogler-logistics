@@ -22,17 +22,25 @@
         </div>
 
         <?php
+            if (!isset($_GET['tracking']) || !isset($_GET['zip'])) {
+                return;
+            }
+
+            $tracking = trim($_GET['tracking']);
+            $zip = trim($_GET['zip']);
+
             if ($tracking == '' && $zip == '') {
                 return;
-            } else if ($tracking == '' || $zip == '') {
+            }
+            if ($tracking == '' || $zip == '') {
                 echo '<div class="container"><h2>Shipment Details</h2><br><p>To perform a query, all fields must be filled in</p></div>';
                 return;
             }
 
             require 'inc/db.php';
 
-            $tracking = $db->real_escape_string(trim($_GET['tracking']));
-            $zip = $db->real_escape_string(trim($_GET['zip']));
+            $tracking = $db->real_escape_string($tracking);
+            $zip = $db->real_escape_string($zip);
 
             $query = 'SELECT * FROM shipment INNER JOIN address ON shipment.recipient = address.id WHERE shipment.id = "' . $tracking . '" AND address.zip="' . $zip . '";';
 
