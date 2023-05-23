@@ -7,17 +7,17 @@
     </head>
     <body>
 
-        <div class="kasten">
+        <div class="container">
     
             <a href="index.php"><img src="src/logo.png" alt="Vogler Logistics Logo"></a>
 
             <br><h2>Admin Interface</h2><br>
 
             <form method="post">
-                <input type="text" id="username" name="username" placeholder="Benutzername"><br>
-                <input type="password" id="password" name="password" placeholder="Passwort"><br><br>
-                <input type="text" id="query" name="query" placeholder="SQL-Abfrage"><br><br>
-                <button type="submit" id="go" name="go">Los</button>
+                <input type="text" id="username" name="username" placeholder="Username"><br>
+                <input type="password" id="password" name="password" placeholder="Password"><br><br>
+                <input type="text" id="query" name="query" placeholder="SQL-Query"><br><br>
+                <button type="submit" id="go" name="go">Go</button>
             </form>
 
         </div>
@@ -32,23 +32,23 @@
 
             $sha = hash('sha256', $password);
 
-            $authquery = 'SELECT * FROM admin WHERE benutzername = "' . $username . '" AND passwort = "' . $sha . '";';
+            $authquery = 'SELECT * FROM admin WHERE username = "' . $username . '" AND password = "' . $sha . '";';
             $auth = $db->query($authquery);
             $db->close();
 
             if ($auth->num_rows) {
                 require 'inc/db.php';
 
-                $erg = $db->query($query);
+                $res = $db->query($query);
                                
-                echo '<div class=kasten><h2>Output</h2><br><p>' . $query . '<br><br>';
+                echo '<div class=container><h2>Output</h2><br><p>' . $query . '<br><br>';
 
                 if ($error = $db->errno) {
                     echo $error . ': ' . $db->error;
-                } else if ($erg->num_rows > 0) {
+                } else if ($res->num_rows > 0) {
                     echo '<pre style="text-align: left;">';
 
-                    while ($set = $erg->fetch_ASSOC()) {
+                    while ($set = $res->fetch_ASSOC()) {
                         print_r($set);
                     }
 
@@ -60,21 +60,21 @@
                 echo '</p></div>';
                 
             } else if ($username == '' && $password == '' && $query == '') {
-                //nichts passiert
+                //nothing happens
             } else if ($username == '' || $password == '' || $query == '') {
-                echo '<div class="kasten"><h2>Output</h2><br><p>Um die Rechte für eine Abfrage zu bestätigen, müssen alle Felder ausgefüllt sein.</p></div>';
+                echo '<div class="kasten"><h2>Output</h2><br><p>Some inputs are missing</p></div>';
             } else {
-                echo '<div class="kasten"><h2>Output</h2><br><p>Die angegebenen Nutzerdaten stimmen mit keinem im System geführten Admin-Konto überein.</p></div>';
+                echo '<div class="container"><h2>Output</h2><br><p>No admin account exists under the given username and password</p></div>';
             }
 
             $db->close();
         ?>
 
-        <div class="kasten">
+        <div class="container">
 
-            <p><a href="kontakt.php" style="color: #aaa; text-decoration: none;">kontakt</a>
+            <p><a href="contact.php" style="color: #aaa; text-decoration: none;">contact</a>
             <span style="color: #ffffff;">....................................</span>
-            <a href="location.php" style="color: #aaa; text-decoration: none;">loaction</a>
+            <a href="location.php" style="color: #aaa; text-decoration: none;">location</a>
             <span style="color: #ffffff;">....................................</span>
             <a href="admin.php" style="color: #aaa; text-decoration: none;">admin</a></p>
 

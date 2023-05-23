@@ -7,15 +7,15 @@
     </head>
     <body>
 
-        <div class="kasten">
+        <div class="container">
     
             <a href="index.php"><img src="src/logo.png" alt="Vogler Logistics Logo"></a>
 
             <br><h2>Package Tracking</h2><br>
 
             <form method="get">
-                <input type="text" id="tracking" name="tracking" placeholder="tracking number"><br>
-                <input type="text" id="zip" name="zip" placeholder="recipient zipcode"><br><br>
+                <input type="text" id="tracking" name="tracking" placeholder="Tracking Number"><br>
+                <input type="text" id="zip" name="zip" placeholder="Recipient Zipcode"><br><br>
                 <button type="submit" id="go">Go</button>
             </form>
 
@@ -24,35 +24,34 @@
         <?php
             require 'inc/db.php';
 
-
             $tracking = $db->real_escape_string(trim($_GET['tracking']));
-            $plz = $db->real_escape_string(trim($_GET['zip']));
+            $zip = $db->real_escape_string(trim($_GET['zip']));
 
-            $query = 'SELECT * FROM sendung INNER JOIN adresse ON sendung.empfaenger = adresse.id WHERE sendung.id = "' . $tracking . '" AND adresse.plz="' . $plz . '";';
+            $query = 'SELECT * FROM shipment INNER JOIN address ON shipment.recipient = address.id WHERE shipment.id = "' . $tracking . '" AND address.zip="' . $zip . '";';
 
-            $erg = $db->query($query);
+            $res = $db->query($query);
 
-            $number = $erg->num_rows;
-            $erg = $erg->fetch_ASSOC();
+            $number = $res->num_rows;
+            $res = $res->fetch_ASSOC();
 
             if ($number) {
-                echo '<div class="kasten"><h2>Sendungsdetails</h2><br><p>Status: ' . $erg['status'] . '<br>Kategorie: ' . $erg['kategorie'] . '<br><br><br>Empfänger<br><br>' . $erg['vorname'] . ' ' . $erg['nachname'] . '<br>' . $erg['strasse'] . ' ' . $erg['hausnummer'] . '<br>' . $erg['apartment'] . '<br>' . $erg['plz'] . ' ' . $erg['ort'] . '<br>' . $erg['land'] . '</p></div>';
-            } else if ($tracking == '' && $plz == '') {
+                echo '<div class="container"><h2>Shipment Details</h2><br><p>Status: ' . $res['status'] . '<br>Category: ' . $res['category'] . '<br><br><br>Recipient<br><br>' . $res['first_name'] . ' ' . $res['last_name'] . '<br>' . $res['street'] . ' ' . $res['house_number'] . '<br>' . $res['apartment'] . '<br>' . $res['zip'] . ' ' . $res['city'] . '<br>' . $res['country'] . '</p></div>';
+            } else if ($tracking == '' && $zip == '') {
 
-            } else if ($tracking == '' || $plz == '') {
-                echo '<div class="kasten"><h2>Sendungsdetails</h2><br><p>Um eine Abfrage durchzuführen, müssen alle Felder ausgefüllt sein.</p></div>';
+            } else if ($tracking == '' || $zip == '') {
+                echo '<div class="container"><h2>Shipment Details</h2><br><p>To perform a query, all fields must be filled in</p></div>';
             } else {
-                echo '<div class="kasten"><h2>Sendungsdetails</h2><br><p>Es konnte keinen Eintrag unter den angegebenen Daten gefunden werden. Wenn dies ein Fehler ist, rufen Sie uns bitte an.</p></div>';
+                echo '<div class="container"><h2>Shipment Details</h2><br><p>No entry could be found under the specified details</p></div>';
             }
         ?>
 
         
 
-        <div class="kasten">
+        <div class="container">
 
-            <p><a href="kontakt.php" style="color: #aaa; text-decoration: none;">kontakt</a>
+            <p><a href="contact.php" style="color: #aaa; text-decoration: none;">contact</a>
             <span style="color: #ffffff;">....................................</span>
-            <a href="location.php" style="color: #aaa; text-decoration: none;">loaction</a>
+            <a href="location.php" style="color: #aaa; text-decoration: none;">location</a>
             <span style="color: #ffffff;">....................................</span>
             <a href="admin.php" style="color: #aaa; text-decoration: none;">admin</a></p>
 
