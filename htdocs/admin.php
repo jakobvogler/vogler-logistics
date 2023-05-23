@@ -23,12 +23,18 @@
         </div>
 
         <?php
-            require 'inc/db.php';
-
-
             $username = $_POST['username'];
             $password = $_POST['password'];
             $query = $_POST['query'];
+
+            if ($username == '' && $password == '' && $query == '') {
+                return;
+            } else if ($username == '' || $password == '' || $query == '') {
+                echo '<div class="container"><h2>Output</h2><br><p>Some inputs are missing</p></div>';
+                return;
+            }
+
+            require 'inc/db.php';
 
             $sha = hash('sha256', $password);
 
@@ -59,10 +65,6 @@
 
                 echo '</p></div>';
                 
-            } else if ($username == '' && $password == '' && $query == '') {
-                //nothing happens
-            } else if ($username == '' || $password == '' || $query == '') {
-                echo '<div class="kasten"><h2>Output</h2><br><p>Some inputs are missing</p></div>';
             } else {
                 echo '<div class="container"><h2>Output</h2><br><p>No admin account exists under the given username and password</p></div>';
             }
