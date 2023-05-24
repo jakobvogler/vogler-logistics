@@ -42,7 +42,7 @@
                 
                 require 'inc/db.php';
 
-                $db = connect($_ENV["ADMIN_USERNAME"], $_ENV["ADMIN_PASSWORD"])
+                $db = connect($_ENV["ADMIN_USERNAME"], $_ENV["ADMIN_PASSWORD"]);
 
                 $username = $db->real_escape_string($username);
                 $password = $db->real_escape_string($password);
