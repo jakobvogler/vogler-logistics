@@ -40,7 +40,7 @@
                 
                 require 'inc/db.php';
 
-                $db = connect($_ENV["CUSTOMER_USERNAME"], $_ENV["CUSTOMER_PASSWORD"]);
+                $db = connect(getenv("CUSTOMER_USERNAME"), getenv("CUSTOMER_PASSWORD"));
                 
                 $tracking = $db->real_escape_string($tracking);
                 $zip = $db->real_escape_string($zip);
