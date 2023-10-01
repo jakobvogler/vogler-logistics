@@ -51,11 +51,8 @@
                 
                 $authquery = 'SELECT * FROM admin WHERE username = "' . $username . '" AND password = "' . $sha . '";';
                 $auth = $db->query($authquery);
-                $db->close();
                 
                 if ($auth->num_rows) {
-                    require 'inc/db.php';
-                    
                     $res = $db->query($query);
                     
                     echo '<div class=container><h2>Output</h2><br><p>' . $query . '<br><br>';
@@ -79,8 +76,6 @@
                 } else {
                     echo '<div class="container"><h2>Output</h2><br><p>No admin account exists under the given username and password</p></div>';
                 }
-                
-                $db->close();
             }
 
             script();
